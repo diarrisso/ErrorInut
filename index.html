@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+
+<body>
+<div class="container">
+
+    <div name="mainDiv" id="mainDiv">
+        <form   method="post" name="frmCSVImport" id="frmCSVImport" enctype="multipart/form-data">
+            <!-- <div class="form-group col-md-6">
+                <label name="kunndenn" for="kundennummer" class="control-label">Kundennummer</label>
+                <input type="text" class="form-control" id="kundennummer" name="kundennummer" required>
+                <div class="invalid-feedback" id="kundennummer_error"> </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="name" class="control-label">Name</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+                <div class="invalid-feedback" name="name_error"> </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="urlSc" class="control-label">UrlSc</label>
+                <input type="text" class="form-control" id="urlSc" name="urlSc" required>
+                <div class="invalid-feedback" name="urlSc_error"> </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="rufnummerSc" class="control-label">RufnummerSc</label>
+                <input type="tel" class="form-control" id="rufnummerSc" name="rufnummerSc" required>
+                <div class="invalid-feedback" name="rufnummerSc_error"> </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="urlCc" class="control-label">UrlCc</label>
+                <input type="text" class="form-control" id="urlCc" name="urlCc" required>
+                <div class="invalid-feedback" name="urlCc_error"> </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="$rufnummerCc" class="control-label">RufnummerCc</label>
+                <input type="tel" class="form-control" id="rufnummerCc" name="rufnummerCc" required>
+                <div class="invalid-feedback" name="rufnummerCc_error"> </div>
+            </div> -->
+
+            <div class="form-group">
+                <input type="file" name="file" id="fileUpload" class="file" >
+                <div class="invalid-feedback" name="fileError"> </div>
+            </div>
+            <button type="submit" name="import" id="import" class="btn btn-info">speichert</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+<!-- <script src="validation.js"></script> -->
+<script>
+
+    $(document).ready(function () {
+
+        const mainDiv = $('div[name=mainDiv]');
+        const csvInputFile = document.querySelector('input').value;
+
+        function validateFile() {
+
+            console.log( csvInputFile );
+            if ( csvInputFile.length < 0 ) {
+               let  error = "No source found to import. Please choose a CSV file. ";
+                $(this).next().addClass('is-invalid').html(error);
+                return false;
+            }
+            return true;
+        }
+
+        let errorDisplay = function showError(forminput) {
+
+            forminput.removeClass('is-invalid');
+            let invalidElement = [];
+            forminput.each(function () {
+                if (this.checkValidity() === false) {
+                    let inputName = $(this).attr('name');
+                    $(this).addClass('is-invalid');
+                    invalidElement.push($(this).attr('name'));
+                    $(this).next().html( inputName + ' ist eine Pflichtfelder, oder die Daten sind nicht Valid');
+                }
+            });
+
+            return invalidElement.length === 0;
+        }
+        $('#import').click(function(e) {
+            e.preventDefault();
+
+            var data = new FormData();
+            var files = $("#fileUpload").get(0).files;
+
+            console.log(' getFiles => ' + files )
+
+            console.log(' getData => ' + data )
+
+            // Add the uploaded file content to the form data collection
+            if (files.length > 0) {
+                data.append("upload", files[0]);
+
+            }
+            const file = document.querySelector('input[type=file]').value;
+                console.log('texte => ' + data );
+            $.ajax({
+                url: 'ajax.php',
+                type: "POST",
+                contentType: false,
+                processData: false,
+                data: data,
+                beforeSend: function() {
+                    console.log( 'bevor schoiek =>' + this.data );
+                },
+                success: function ( data ) {
+                    console.log('ajax retour  ' + data );
+                },
+            });
+        });
+    });
+
+</script>
+
+
+</body>
+
+</html>
