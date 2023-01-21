@@ -1,5 +1,20 @@
 <?php
 
+require_once 'config.php';
+
+
+$connection = getConnection();
+
+if ($connection) {
+    echo 'bingo';
+
+} else {
+
+    echo 'error du server';
+    error_log(' error du server ');
+}
+
+
 if( $_FILES['upload']['error'] == 0 ) {
     $name = $_FILES['upload']['name'];
     $array = explode('.', $_FILES['upload']['name']);
@@ -21,50 +36,130 @@ if( $_FILES['upload']['error'] == 0 ) {
      */
     array_shift($csv_data);
 
+
+
 // Print Result Data
 
 
-   $CSVData = array();
+
+
+    $CSVData = array();
     $output = array();
-    foreach ($csv_data as $key => $row ) {
-        if ( empty( $row ))  {
-            continue;
+    foreach ( $csv_data as $key => $row ) {
+        unset($row[12]);
+        unset($row[11]);
+        unset($row[14]);
+        unset($row[13]);
+
+            $nummer  = explode(':', $row[1]);
+
+
+        if ($nummer[0] == "2100000002002300" ) {
+
+
+            $c =  "5";
+            $insertQuery = "INSERT INTO Blog.tbl_users( 
+                           tbl_users.userName,
+                           tbl_users.firstName, 
+                           tbl_users.bwertung,
+                           tbl_users.interviewID,
+                           tbl_users.bussines,
+                            tbl_users.nps,
+                           tbl_users.queu,
+                           tbl_users.bemerkung
+                           )VALUES ('".$row[5]."', '".$row[6]."', '".$c[0]."', '".$row[0]."', '".$row[8]."', '".$row[4]."','".$row[3]."',  '".$row[9]."')";
+            $statement = $connection->prepare($insertQuery);
+            $statement->execute();
+
         }
 
-        if ($key === 0 ) {
-            continue;
+
+        if ($nummer[0] == "2100000002000400") {
+
+
+            $c = '5';
+            echo $c;
+            $insertQuery = "INSERT INTO Blog.tbl_users( 
+                           tbl_users.userName,
+                           tbl_users.firstName, 
+                           tbl_users.bwertung,
+                           tbl_users.interviewID,
+                           tbl_users.bussines,
+                            tbl_users.nps,
+                           tbl_users.queu,
+                           tbl_users.bemerkung
+                           )VALUES ('" . $row[5] . "', '" . $row[6] . "', '" . $c. "', '" . $row[0] . "', '" . $row[8] . "', '" . $row[4] . "','" . $row[3] . "',  '" . $row[9] . "')";
+            $statement = $connection->prepare($insertQuery);
+            $statement->execute();
+
         }
 
 
-        if ( array_key_exists($row[0], $output) ) {
+        if ($nummer[0] == "2100000002001300") {
 
-            // this is duplicate based on date - merge into output
-            $output[$row[0]] = array_merge($output[$row[0]], $row);
-        } else {
 
-            // new entry for date
-            $output[$row[0]] = $row;
+            $c = '5';
+            $insertQuery = "INSERT INTO Blog.tbl_users( 
+                           tbl_users.userName,
+                           tbl_users.firstName, 
+                           tbl_users.bwertung,
+                           tbl_users.interviewID,
+                           tbl_users.bussines,
+                            tbl_users.nps,
+                           tbl_users.queu,
+                           tbl_users.bemerkung
+                           )VALUES ('" . $row[5] . "', '" . $row[6] . "', '" . $c. "', '" . $row[0] . "', '" . $row[8] . "', '" . $row[4] . "','" . $row[3] . "',  '" . $row[9] . "')";
+            $statement = $connection->prepare($insertQuery);
+            $statement->execute();
+
         }
 
 
 
 
-        $first_names = array_column($csv_data, 'id');
+
+
+
+
+
+
+
+
+        if ($row[0]) {
+            $interwiewIde = $row[0];
+        }
+
+        if ($row[5]) {
+            $vormane = $row[5];
+        }
+
+        if ($row[6]) {
+            $nachname = $row[6];
+        }
+
+
+
+
+        /*switch ($nummer) {
+
+            case "2100000002000400":
+
+
+                break;
+            case '2100000002001800':
+                echo 'ja';
+                break;
+            default :
+                'cool';
+        }*/
         $CSVData = $row;
 
     }
 
-    $result = [];
-    foreach ($csv_data as $item) {
-        $column = $item[0];
-        unset($item[0]);
-        $result[$column][] =  implode(',', $item);
-    }
+    error_log('row => '  . print_r( $CSVData, true ) );
 
 
-    print_r($result);
-
-
+    json_encode($csv_data);
 
 }
 
