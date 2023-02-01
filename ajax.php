@@ -25,16 +25,17 @@ if( $_FILES['upload']['error'] == 0 ) {
     $csv_data = array_map('str_getcsv', file($tmpName));
     $result = null;
     $teste =  [
-         array('mamadi',1,2,3,0.00,5.67,6.56,7.56),
-        array('mamadi',1,2,3,4,5,6,7.600),
-        array('mamadi',1,2,3,4,5,6,7),
-        array('mamadi',1,2,3,4,5,6,7),
-        array('mamadi',1,2,3,4,5,6,7),
-        array('eva',150,25,35,45,55,65,75),
-        array('eva',15,25,35,45,56,66,79),
-        array('eva',14,25,36,47,57,67,77),
-        array('eva',14,25,36,47,57,67,77),
-        array('eva',14,25,36,47,57,67,77),
+         array('mamadi',4,2,3,5,5.67,6.56,6),
+         array('mamadi',4,2,3,5,5.67,6.56,6),
+         array('masingacite',4,2,3,5,5.67,6.56,6),
+         array('masingacite',4,2,3,5,5.67,6.56,6),
+         array('eva',4,2,3,5,5.67,6.56,6),
+         array('eva',4,2,3,5,5.67,6.56,6),
+         array('saran',4,2,3,5,5.67,6.56,6),
+         array('saran',4,2,3,5,5.67,6.56,6),
+         array('fanta',4,2,3,5,5.67,6.56,6),
+         array('fanta',4,2,3,5,5.67,6.56,6),
+
     ];
     $newArray = array();
     $sum1 = 0;
@@ -51,86 +52,38 @@ if( $_FILES['upload']['error'] == 0 ) {
     }
 
 
-    $sum = array_fill_keys(array_keys(reset($teste)), 0);
+    function array_keys_exist( $array, $index, $id, $row)
+    {
 
-    foreach($sum as $key => &$value) {
-        $value = array_sum(array_column($teste, $key));
-    }
-
-
-
-    $sum = [];
-
-    foreach($teste as $item) {
-        foreach($item as $key => $values) {
-            if (!isset($sum[$key])) $sum[$key] = 0;
-            $sum[$key] += $values;
-            $name = $values[0];
-            $sum[$key]['nom'] += $values[1];
-            $sum[$key]['prenom'] += $values[2];
-            $sum[$key]['int1'] += $values[3];
-            $sum[$key]['int2'] += $values[4];
-            $sum[$key]['int3'] += $values[5];
-            $sum[$key]['int4']+= $values[6];
-            $sum[$key]['int5'] += $values[7];
-            $newArray[] = $sum;
+        if (isset( $array[$id][$index] ))
+        {
+             return $array[$id][$index] += $row;
         }
+
+        return  $array[$id][$index] = $row;
     }
 
+        $sum = array();
+        $newArraye = array();
+        foreach($teste as $key => $values) {
 
+            $name = $values[0];
+            $sum[$name]['nom'] = array_keys_exist( $sum, 'nom', $name, $values[1]);
+            $sum[$name]['prenom'] = array_keys_exist( $sum, 'prenom', $name, $values[2]);
+            $sum[$name]['int1'] = array_keys_exist( $sum, 'int1', $name, $values[3]);
+            $sum[$name]['int2'] = array_keys_exist( $sum, 'int2', $name, $values[4]);
+            $sum[$name]['int3'] = array_keys_exist( $sum, 'int3', $name, $values[5]);
+            $sum[$name]['int4'] = array_keys_exist( $sum, 'int4', $name, $values[6]);
+            $sum[$name]['int5'] = array_keys_exist( $sum, 'int5', $name, $values[7]);
+            $newArraye = $sum;
+        }
 
-
-    error_log('$message'.print_r($newArray,true));
-    print_r($sum);
-    die();
-
-
-
-    foreach ( $teste as $key => $item ) {
-
-        /*$data[$name]['nom'] = sumValues($item[1]);
-        $data[$name]['prenom'] = sumValues($item[2]);
-        $data[$name]['int1'] =sumValues($item[3]);
-        $data[$name]['int2'] = sumValues($item[4]);
-        $data[$name]['int3'] = sumValues($item[5]);
-        $data[$name]['int4']=  sumValues($item[6]);
-        $data[$name]['int5'] = sumValues($item[7]);
-        $newArray = $data;*/
-}
+         error_log(' refactoren Code = > '.print_r( $newArraye,true ) );
 
 
 
 
 
-    error_log('$data first => '.print_r( $newArray, true ) );
-    die();
 
-    $CSVData = array();
-    $output = array();
-    foreach ( $csv_data as $key => $row ) {
 
-        $column = $row[3];
-
-        $output[$row[3]]['benitzer'] = $row[6];
-        $output[$row[3]]['nom'] = $row[5];
-        $output[$row[3]]['studie'] = $row[8];
-        $output[$row[3]]['email'] = $row[3];
-        $output[$row[3]]['email'] = $row[4];
-        $output[$row[3]]['queue'] = $row[9];
-        $output[$row[3]]['date'] = $row[7];
-        $CSVData[$column] = $output;
-    }
-
-    error_log(' array  csvdata => '.print_r($CSVData, true));
-}
-
-function array_group( array $data, $by_column )
-{
-    $result = [];
-    foreach ($data as $item) {
-        $column = $item[$by_column];
-        unset($item[$by_column]);
-        $result[$column][] = $item;
-    }
-    return $result;
 }
