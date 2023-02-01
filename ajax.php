@@ -24,66 +24,30 @@ if( $_FILES['upload']['error'] == 0 ) {
 
     $csv_data = array_map('str_getcsv', file($tmpName));
     $result = null;
-    $teste =  [
-         array('mamadi',4,2,3,5,5.67,6.56,6),
-         array('mamadi',4,2,3,5,5.67,6.56,6),
-         array('masingacite',4,2,3,5,5.67,6.56,6),
-         array('masingacite',4,2,3,5,5.67,6.56,6),
-         array('eva',4,2,3,5,5.67,6.56,6),
-         array('eva',4,2,3,5,5.67,6.56,6),
-         array('saran',4,2,3,5,5.67,6.56,6),
-         array('saran',4,2,3,5,5.67,6.56,6),
-         array('fanta',4,2,3,5,5.67,6.56,6),
-         array('fanta',4,2,3,5,5.67,6.56,6),
-
-    ];
-    $newArray = array();
-    $sum1 = 0;
-    $sum2 = 0;
-    $sum3 = 0;
-    $sum4 = 0;
-    $sum5 = 0;
-    $sum6 = 0;
-    $sum7 = 0;
-    function sumValues($item) {
-        $carry = 0;
-        $carry += $item;
-        return $carry;
-    }
 
 
-    function array_keys_exist( $array, $index, $id, $row)
-    {
-
-        if (isset( $array[$id][$index] ))
-        {
-             return $array[$id][$index] += $row;
-        }
-
-        return  $array[$id][$index] = $row;
-    }
 
         $sum = array();
         $newArraye = array();
-        foreach($teste as $key => $values) {
+        foreach( $csv_data as $key => $values) {
 
-            $name = $values[0];
-            $sum[$name]['nom'] = array_keys_exist( $sum, 'nom', $name, $values[1]);
-            $sum[$name]['prenom'] = array_keys_exist( $sum, 'prenom', $name, $values[2]);
-            $sum[$name]['int1'] = array_keys_exist( $sum, 'int1', $name, $values[3]);
-            $sum[$name]['int2'] = array_keys_exist( $sum, 'int2', $name, $values[4]);
-            $sum[$name]['int3'] = array_keys_exist( $sum, 'int3', $name, $values[5]);
-            $sum[$name]['int4'] = array_keys_exist( $sum, 'int4', $name, $values[6]);
-            $sum[$name]['int5'] = array_keys_exist( $sum, 'int5', $name, $values[7]);
-            $newArraye = $sum;
+          $chiffre = $values[12];
+
+            error_log(' replace quoi => '.print_r( $values[12],true ) );
+
+            error_log(' zero => '.print_r( $values[5],true ) );
+
+            $chiffre = str_replace('.', ',', $values[12]);
+            $zero = str_replace('00', ',0', $values[5]);
+         $sum['nouveau'] = $values;
+
+
+            error_log(' point figuire => '.print_r( $chiffre,true ) );
+
+            error_log(' zero = > '.print_r( $zero,true ) );
+
+
+
         }
-
-         error_log(' refactoren Code = > '.print_r( $newArraye,true ) );
-
-
-
-
-
-
-
+        error_log(' neauveau tableau = > '.print_r( $sum,true ) );
 }
